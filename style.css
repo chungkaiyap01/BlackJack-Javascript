@@ -1,0 +1,23 @@
+#master{
+    margin:100px;
+}
+
+#dealer{
+    font-size: 50px;
+}
+
+#player{
+    font-size: 50px;
+}
+
+#result{
+    font-size: 100px;
+}
+
+#draw,#stand{
+    margin-left:20%;
+}
+
+/* #dCard1{
+    visibility: hidden;
+} */
