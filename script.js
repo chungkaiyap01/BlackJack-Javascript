@@ -39,23 +39,23 @@ $(document).ready(function () {
         DValue = CalculateCardValue(DealerDeck);
         PValue = CalculateCardValue(PlayerDeck);
 
+        $("#dCard1").hide();
+
         if (DValue == 21) {
             document.getElementById('result').innerHTML = "Dealer Win !";
-            $("#result").show();
+            EndGame();
 
         } else if (PValue == 21) {
             document.getElementById('result').innerHTML = "Player Win !";
-            $("#result").show();
+            EndGame();
 
         }
-
-        $("#dCard1").hide();
 
     });
 
 
     $("#draw").click(function () {
-        debugger;
+
         if (maxPCard != 5) {
             var c = NewDeck.shift();
             PlayerDeck.push(c);
@@ -66,11 +66,7 @@ $(document).ready(function () {
 
             if (PValue > 21) {
                 document.getElementById('result').innerHTML = "Dealer Win !";
-                $("#draw").attr("disabled", true);
-                $("#stand").attr("disabled", true);
-                $("#dCard1").show();
-                $("#hid").hide();
-                $("#result").show();
+                EndGame();
             }
 
         }
@@ -95,15 +91,11 @@ $(document).ready(function () {
                         document.getElementById('result').innerHTML = "Player Win !";
                     }
 
-                    $("#result").show();
                     break;
                 }
             }
 
-            $("#stand").attr("disabled", true);
-            $("#draw").attr("disabled", true);
-            $("#hid").hide();
-            $("#dCard1").show();
+            EndGame();
         }
 
     });
@@ -134,11 +126,7 @@ $(document).ready(function () {
                         document.getElementById('result').innerHTML = "Player Win !";
                     }
 
-                    $("#draw").attr("disabled", true);
-                    $("#stand").attr("disabled", true);
-                    $("#dCard1").show();
-                    $("#hid").hide();
-                    $("#result").show();
+                    EndGame();
                     break;
                 }
 
@@ -189,6 +177,7 @@ $(document).ready(function () {
         array_handCard.forEach(function (card) {
 
             var lastletter;
+            var AceCount = 0;
 
             lastletter = card[card.length - 1];
 
@@ -200,10 +189,16 @@ $(document).ready(function () {
 
                 case "A":
 
+                    AceCount++;
+
                     if (array_handCard.length == 2) {
                         totalValue += 11;
                     } else {
                         totalValue += 1;
+                    }
+
+                    if (AceCount == 2 && array_handCard.length == 2) {
+                        totalValue = 21;
                     }
 
                     break;
@@ -249,6 +244,14 @@ $(document).ready(function () {
         PlayerDeck = [];
         DealerDeck = [];
         NewDeck = [];
+    }
+
+    function EndGame() {
+        $("#draw").attr("disabled", true);
+        $("#stand").attr("disabled", true);
+        $("#dCard1").show();
+        $("#hid").hide();
+        $("#result").show();
     }
 })
 
