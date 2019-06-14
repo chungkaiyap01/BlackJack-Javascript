@@ -1,14 +1,17 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
     $("#result").hide();
     $("#hid").hide();
 
-    var maxPCard = 0, maxDCard = 0, PValue = 0, DValue = 0;
+    var maxPCard = 0,
+        maxDCard = 0,
+        PValue = 0,
+        DValue = 0;
     var PlayerDeck = [];
     var DealerDeck = [];
     var NewDeck = [];
 
-    $("#NewGame").click(function () {
+    $("#NewGame").click(function() {
 
         NewGame();
 
@@ -41,7 +44,10 @@ $(document).ready(function () {
 
         $("#dCard1").hide();
 
-        if (DValue == 21) {
+        if (DValue == 21 && PValue == 21) {
+            document.getElementById('result').innerHTML = "Tie !";
+            EndGame();
+        } else if (DValue == 21) {
             document.getElementById('result').innerHTML = "Dealer Win !";
             EndGame();
 
@@ -54,7 +60,7 @@ $(document).ready(function () {
     });
 
 
-    $("#draw").click(function () {
+    $("#draw").click(function() {
 
         if (maxPCard != 5) {
             var c = NewDeck.shift();
@@ -83,7 +89,10 @@ $(document).ready(function () {
 
                 if (DValue >= 16) {
 
-                    if (DValue == 21 || (DValue > PValue && DValue < 21)) {
+                    if (DValue == 21 && PValue == 21) {
+                        document.getElementById('result').innerHTML = "Tie !";
+
+                    } else if (DValue == 21 || (DValue > PValue && DValue < 21)) {
                         document.getElementById('result').innerHTML = "Dealer Win !";
 
 
@@ -101,7 +110,7 @@ $(document).ready(function () {
     });
 
 
-    $("#stand").click(function () {
+    $("#stand").click(function() {
 
         $("#draw").attr("disabled", true);
 
@@ -118,7 +127,10 @@ $(document).ready(function () {
 
                 if (DValue >= 16) {
 
-                    if (DValue == 21 || (DValue > PValue && DValue < 21)) {
+                    if (DValue == 21 && PValue == 21) {
+                        document.getElementById('result').innerHTML = "Tie !";
+
+                    } else if (DValue == 21 || (DValue > PValue && DValue < 21)) {
                         document.getElementById('result').innerHTML = "Dealer Win !";
 
 
@@ -139,7 +151,8 @@ $(document).ready(function () {
 
     function YatesShuffle(array_elements) {
 
-        var i = array_elements.length, randomNum, randomNumIndex;
+        var i = array_elements.length,
+            randomNum, randomNumIndex;
 
         while (--i > 0) {
 
@@ -158,8 +171,8 @@ $(document).ready(function () {
         const suit = ["Spade", "Heart", "Club", "Diamond"];
         const face = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 
-        suit.forEach(function (_suit) {
-            face.forEach(function (_face) {
+        suit.forEach(function(_suit) {
+            face.forEach(function(_face) {
                 deck.push(_suit + " " + _face);
             });
         });
@@ -173,11 +186,12 @@ $(document).ready(function () {
     function CalculateCardValue(array_handCard) {
 
         var totalValue = 0;
+        var AceCount = 0;
 
-        array_handCard.forEach(function (card) {
+        array_handCard.forEach(function(card) {
 
             var lastletter;
-            var AceCount = 0;
+
 
             lastletter = card[card.length - 1];
 
@@ -191,15 +205,7 @@ $(document).ready(function () {
 
                     AceCount++;
 
-                    if (array_handCard.length == 2) {
-                        totalValue += 11;
-                    } else {
-                        totalValue += 1;
-                    }
-
-                    if (AceCount == 2 && array_handCard.length == 2) {
-                        totalValue = 21;
-                    }
+                    totalValue += 11;
 
                     break;
 
@@ -226,6 +232,20 @@ $(document).ready(function () {
                     break;
             }
         });
+
+        if (totalValue > 21 && AceCount > 0) {
+
+            while (AceCount > 0) {
+                AceCount--;
+                totalValue -= 10;
+
+                if (totalValue <= 21) {
+                    break;
+                }
+            }
+
+
+        }
 
         return totalValue;
     }
@@ -254,4 +274,3 @@ $(document).ready(function () {
         $("#result").show();
     }
 })
-
